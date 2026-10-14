@@ -1,0 +1,6 @@
+__pycache__/
+*.partial
+*.tar
+*.log
+node_modules/
+preview-*.png
