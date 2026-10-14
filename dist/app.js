@@ -7,7 +7,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 let data, labels, cols, selected=[], summary=[], activeMetric='fatal';
 const metrics={fatal:'Fatal casualties',adjksi:'Adjusted KSI estimate',rawksi:'Recorded KSI',total:'All casualties'};
 function switchTab(id){
- if(!['explore','findings','history','methods'].includes(id))id='explore';
+ if(!['explore','ai','findings','history','methods'].includes(id))id='explore';
  document.querySelectorAll('.tab-panel').forEach(e=>e.hidden=e.id!==id);
  document.querySelectorAll('nav [data-tab]').forEach(e=>{e.classList.toggle('active',e.dataset.tab===id);if(e.dataset.tab===id)e.setAttribute('aria-current','page');else e.removeAttribute('aria-current');});
 }
