@@ -38,6 +38,6 @@ The first fixed model experiment favours logistic regression slightly on the 202
 Dependencies were installed in the project-level `ml-dependencies` directory, outside the Site source repository, preserving the bundled runtime. Model library versions are in `dist/data/ai-report.json`. Run `node check_ai.cjs` to compare browser inference with Python-generated reference predictions and check scenario handlers. These checks do not establish browser visual quality.
 
 
-## Research bike comparison
+## Motorcycles and age
 
-`dist/bikes.html` adds all-make filters, recorded category and actual displacement bands, a documented partial type mapping, model/capacity drilldown and CSV export. `analyse_bikes.py` builds aggregate data from 2020 retained extract and 2021–2025 annual inputs. Recorded totals reconcile to national figures; adjusted estimates exclude 2020 due to vintage mismatch. No model-specific exposure rates are claimed. The MT-07/CBR650R/Tiger shortlist is editorial engineering judgement for general safety research. Run `node check_bikes.cjs` for aggregation and handler checks. Visual browser verification remains unavailable in this environment.
+`dist/bikes.html` compares all makes and capacities with age filters, age-by-category/capacity/type tables, model-family drilldown and CSV exports. Default: all capacities, riders only, 2020–2025. Age is casualty age, explicitly relabelled for passenger and combined views. Curated bike types remain partial. No personal purchasing shortlist is published. `analyse_bikes.py` validates recorded national totals in all years, adjusted totals from 2021 only. `node check_bikes.cjs` checks age aggregation and interactions. Browser visual QA remains unverified.

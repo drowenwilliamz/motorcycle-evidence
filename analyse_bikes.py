@@ -5,7 +5,7 @@ import pandas as pd
 ROOT=Path(__file__).resolve().parent
 DATA=ROOT.parents[1]/'Road Safety'
 MC={2,3,4,5,23,97,103,104,105,106}
-cc=['collision_index','collision_year','vehicle_reference','casualty_reference','casualty_class','casualty_type','casualty_severity','casualty_adjusted_severity_serious']
+cc=['collision_index','collision_year','vehicle_reference','casualty_reference','casualty_class','casualty_type','casualty_severity','casualty_adjusted_severity_serious','age_of_casualty']
 vc=['collision_index','collision_year','vehicle_reference','generic_make_model','engine_capacity_cc']
 cs=[];vs=[]
 for y in range(2020,2026):
@@ -82,6 +82,7 @@ d.loc[d.casualty_type.eq(23),'band']='Electric'
 d['fatal']=d.casualty_severity.eq(1).astype(int)
 d['ksi']=d.casualty_severity.le(2).astype(int)
 d['n']=1
+d['age']=pd.cut(d.age_of_casualty,[-0.1,15,19,24,34,44,54,64,float('inf')],labels=['Under 16','16–19','20–24','25–34','35–44','45–54','55–64','65+']).astype('string').fillna('Unknown age')
 weights=pd.to_numeric(d.casualty_adjusted_severity_serious,errors='coerce')
 assert weights[d.fatal.eq(0)].between(0,1).all()
 d['adj']=d.fatal+weights.where(d.fatal.eq(0),0)
@@ -92,7 +93,7 @@ for y,g in d.groupby('collision_year'):
     if y>=2021: assert abs(g.adj.sum()-h['adjusted_ksi'])<.03
 # 2020 has an older adjustment vintage: never export as comparable adjusted estimates.
 d.loc[d.collision_year.eq(2020),'adj']=0
-group=['collision_year','make','model','style','category','band','cc','casualty_class']
+group=['collision_year','make','model','style','category','band','cc','casualty_class','age']
 g=d.groupby(group,dropna=False).agg(n=('n','sum'),fatal=('fatal','sum'),ksi=('ksi','sum'),adj=('adj','sum')).reset_index()
 g['adj']=g.adj.round(6)
 assert g.n.sum()==len(d)
@@ -103,3 +104,5 @@ print('Over 500cc generic families:')
 print(d[d.category.eq('>500cc')].groupby(['model','style']).agg(n=('n','sum'),ksi=('ksi','sum')).sort_values('ksi',ascending=False).head(20).to_string())
 print('Actual capacity bands:')
 print(d.groupby('band').agg(n=('n','sum'),ksi=('ksi','sum')).to_string())
+print('Riders: category by age (recorded KSI)')
+print(d[d.casualty_class.eq(1)].pivot_table(index='age',columns='category',values='ksi',aggfunc='sum',fill_value=0).to_string())
