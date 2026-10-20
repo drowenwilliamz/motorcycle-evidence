@@ -1,0 +1,13 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),E=require('./dist/factors.js');
+const data=JSON.parse(fs.readFileSync('dist/data/factors.json'));
+const rows=E.select(data.rows,2025,'FSC (adjusted)'),pairs=E.pairs(rows),brake=pairs.find(p=>p.factor.startsWith('Sudden braking'));
+assert.equal(brake.direct.percent,5);assert.equal(brake.direct.count,214);assert.equal(brake.direct.denominator,4484);assert.equal(brake.converted.percent,3);assert.equal(brake.converted.count,44);assert.equal(brake.converted.denominator,1394);
+assert.equal(pairs.find(p=>p.factor.startsWith('Ineffective')).direct.percent,29);
+assert.ok(E.pairs(E.select(data.rows,2020,'Fatal')).every(p=>!p.direct));
+assert.equal(data.split.find(r=>r.assignment==='Any').percent2025,53);assert.equal(data.split.find(r=>r.assignment==='Driver or rider of vehicle').percent2025,52);
+const html=fs.readFileSync('dist/factors.html','utf8'),nodes={};
+for(const m of html.matchAll(/<(\w+)[^>]*\bid="([^"]+)"[^>]*>/g))nodes[m[2]]={tag:m[1],value:'',events:{},textContent:'',hidden:false,addEventListener(k,f){this.events[k]=f;},set innerHTML(v){this._html=v;if(this.tag==='select')this.value=v.match(/<option value="([^"]*)"/)?.[1]??'';},get innerHTML(){return this._html;}};
+nodes['f-year'].value='2025';nodes['f-severity'].value='FSC (adjusted)';let downloaded;
+const ctx=vm.createContext({Intl,console,Map,Set,Number,String,Math,Array,Object,Promise,Error,Blob,setTimeout,URL:{createObjectURL:()=> 'blob:test',revokeObjectURL(){}},document:{getElementById:id=>{assert.ok(nodes[id],id);return nodes[id];},createElement:()=>({click(){downloaded=this.download;}})},fetch:async()=>({ok:true,json:async()=>data})});
+vm.runInContext(fs.readFileSync('dist/factors.js','utf8'),ctx);
+setImmediate(()=>{assert.equal(nodes['f-error'].hidden,false===true);assert.ok(nodes['f-coverage'].textContent.includes('4,484'));assert.ok(nodes['f-table'].innerHTML.includes('214'));assert.ok(nodes['f-context'].textContent.includes('53%'));nodes['f-year'].value='2020';nodes['f-controls'].events.change();assert.ok(nodes['f-coverage'].textContent.includes('Unavailable'));assert.ok(!nodes['f-table'].innerHTML.includes('NaN'));nodes['f-severity'].value='Fatal';nodes['f-controls'].events.change();nodes['f-factor'].events.change();nodes['f-export'].events.click();assert.equal(downloaded,'dft-motorcycle-factors-2020.csv');assert.ok(E.csv(pairs,2025,'FSC (adjusted)').includes('214'));console.log('PASS: published source fixtures; distinct denominators; missing direct years; assignment split; page load; filters; trend; CSV.');});
