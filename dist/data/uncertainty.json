@@ -1,0 +1,97 @@
+{
+  "scope": "2024 versus 2025; motorcycle riders and passengers; all capacities; Great Britain",
+  "method": "Exact conditional Poisson count-ratio interval (95%); two-sided binomial test; Holm adjustment across all nine age categories including unknown age.",
+  "assumptions": "Independent Poisson counts and equal one-year observation periods. Casualties in the same collision may be correlated. No adjustment for mileage, demographics, reporting bias or confounding. Intervals are individual, not simultaneous.",
+  "rows": [
+    {
+      "age": "Under 16",
+      "before": 1.0,
+      "after": 4.0,
+      "ratio": 4.0,
+      "low": 0.39583328331853335,
+      "high": 196.98987298932116,
+      "p": 0.375,
+      "p_holm": 1
+    },
+    {
+      "age": "16\u201319",
+      "before": 32.0,
+      "after": 36.0,
+      "ratio": 1.125,
+      "low": 0.6792383471501934,
+      "high": 1.8709895059170893,
+      "p": 0.716300760154337,
+      "p_holm": 1
+    },
+    {
+      "age": "20\u201324",
+      "before": 38.0,
+      "after": 37.0,
+      "ratio": 0.9736842105263158,
+      "low": 0.6021742499937933,
+      "high": 1.5730821021199068,
+      "p": 1.0,
+      "p_holm": 1
+    },
+    {
+      "age": "25\u201334",
+      "before": 85.0,
+      "after": 77.0,
+      "ratio": 0.9058823529411765,
+      "low": 0.6567456878430554,
+      "high": 1.2478478179193855,
+      "p": 0.5824757301133331,
+      "p_holm": 1
+    },
+    {
+      "age": "35\u201344",
+      "before": 42.0,
+      "after": 65.0,
+      "ratio": 1.5476190476190477,
+      "low": 1.034021258199828,
+      "high": 2.338705189764942,
+      "p": 0.03294666029982695,
+      "p_holm": 0.2635732823986156
+    },
+    {
+      "age": "45\u201354",
+      "before": 53.0,
+      "after": 50.0,
+      "ratio": 0.9433962264150944,
+      "low": 0.6280068474421908,
+      "high": 1.4153473137713803,
+      "p": 0.8438976552528611,
+      "p_holm": 1
+    },
+    {
+      "age": "55\u201364",
+      "before": 65.0,
+      "after": 72.0,
+      "ratio": 1.1076923076923078,
+      "low": 0.7810304452929593,
+      "high": 1.5736011571282391,
+      "p": 0.60838410689996,
+      "p_holm": 1
+    },
+    {
+      "age": "65+",
+      "before": 24.0,
+      "after": 45.0,
+      "ratio": 1.875,
+      "low": 1.1183283999704339,
+      "high": 3.2175840258221213,
+      "p": 0.015432297453701269,
+      "p_holm": 0.13889067708331143
+    },
+    {
+      "age": "Unknown",
+      "before": 0,
+      "after": 0,
+      "ratio": null,
+      "low": null,
+      "high": null,
+      "p": 1.0,
+      "p_holm": 1
+    }
+  ]
+}

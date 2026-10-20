@@ -28,6 +28,18 @@ setImmediate(()=>{
  nodes['history-modern'].events.click();assert.equal(nodes['history-from'].value,'2005');
  nodes.download.events.click();assert.equal(downloadURL,'motorcycle-summary-2025-2025.csv');
  assert.ok(nodes['findings-content'].innerHTML.includes('13.5%'));
+ const uncertainty=JSON.parse(fs.readFileSync(path.join(root,'data/uncertainty.json'),'utf8'));
+ assert.equal(uncertainty.rows.length,9);
+ assert.deepEqual(uncertainty.rows.filter(r=>r.p<.05).map(r=>r.age),['35–44','65+']);
+ assert.ok(uncertainty.rows.every(r=>r.p_holm>=r.p&&r.p_holm<=1));
+ assert.ok(uncertainty.rows.every(r=>r.p_holm>=.05));
+ assert.ok(nodes['change-table'].innerHTML.includes('0.264'));
+ assert.ok(nodes['change-table'].innerHTML.includes('0.139'));
+ assert.ok(nodes['uncertainty-summary'].textContent.includes('No age group'));
+ const guide=fs.readFileSync(path.join(root,'evidence.html'),'utf8');
+ assert.ok(guide.includes('No request has been submitted'));
+ assert.ok(!guide.includes('<script src="bikes.js"'));
+ for(const p of [...guide.matchAll(/(?:src|href)="([^"#]+)"/g)].map(x=>x[1]).filter(x=>!x.startsWith('http')))assert.ok(fs.existsSync(path.join(root,p.split('#')[0])),`Broken guide link ${p}`);
  assert.ok(nodes.audit.innerHTML.includes('Reconciled'));
  for(const p of [...html.matchAll(/(?:src|href)="([^"#]+)"/g)].map(x=>x[1]).filter(x=>!x.startsWith('http')))assert.ok(fs.existsSync(path.join(root,p)),`Broken local link ${p}`);
  console.log('PASS: initialization; annual controls; rider/passenger filters; independent age/capacity cross-filter; four measures; reset; year boundary; historical rate view; CSV handler; local links. Browser visual verification remains unavailable.');
